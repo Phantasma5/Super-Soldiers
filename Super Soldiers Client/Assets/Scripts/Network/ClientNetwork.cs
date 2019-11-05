@@ -427,13 +427,13 @@ public class ClientNetwork : UCNetwork
         bool rpcSent = false;
         MethodInfo theMethod = null;
         Component targetScript = null;
-        Component[] scripts = targetObject.GetComponents(typeof(MonoBehaviour));
+        Component[] scripts = SSRPCs.HelperFunctions.FilterScripts(targetObject.GetComponents(typeof(MonoBehaviour)));
         for (int i = 0; i < scripts.Length; i++)
         {
             theMethod = null;
             // Debug.Log(scripts[i].GetType().ToString());
             theMethod = scripts[i].GetType().GetMethod(functionName);
-            if (theMethod != null)
+            if (theMethod != null && SSRPCs.HelperFunctions.CheckMethod(theMethod))
             {
                 if (!rpcSent)
                     rpcSent = true;

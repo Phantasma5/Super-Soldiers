@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using RPC;
+using SSRPCs;
 
-[HasRPCs]
+[RPCClass]
 public class PlayerRPC : MonoBehaviour
 {
     [HideInInspector] private PlayerController myPlayerController;

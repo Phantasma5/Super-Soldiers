@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace RPC
+namespace SSRPCs
 {
     //methods with this attribute will be able to be called remotely; must be in a HasRPCs class;
     [System.AttributeUsage(AttributeTargets.Method)]
@@ -15,7 +15,7 @@ namespace RPC
 
     //classes with this attribute will be scanned for methods that can be called remotely;
     [System.AttributeUsage(AttributeTargets.Class)]
-    public class HasRPCs : Attribute
+    public class RPCClass : Attribute
     {
 
     }
@@ -25,12 +25,12 @@ namespace RPC
         //check a method for the RPC flag
         public static bool CheckMethod(MethodInfo methodInfo)
         {
-            return Attribute.IsDefined(methodInfo, typeof(RPC));
+            return Attribute.IsDefined(methodInfo, typeof(RPCMethod));
         }
         //check a class for the HasRPCs flag
         public static bool CheckClass(Type type)
         {
-            return Attribute.IsDefined(type, typeof(HasRPCs));
+            return Attribute.IsDefined(type, typeof(RPCClass));
         }
         //Go through a list of components and return the ones that have the HasRPCs flag
         public static Component[] FilterScripts(Component[] components)
