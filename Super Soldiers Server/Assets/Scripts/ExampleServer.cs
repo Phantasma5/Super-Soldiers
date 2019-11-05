@@ -4,9 +4,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using LitJson;
+using SSRPCs;
 
+[RPCClass]
 public class ExampleServer : MonoBehaviour
 {
+    public enum GameState
+    {
+        pregame,
+        maingame,
+        postgame
+    }
+    public static GameState gameState = GameState.pregame;
+
     public static ExampleServer instance;
 
     public ServerNetwork serverNet;
@@ -23,15 +33,6 @@ public class ExampleServer : MonoBehaviour
     }
     List<Player> players = new List<Player>();
     int currentActivePlayer;
-    
-    // State of the board
-    enum BoardState
-    {
-        Empty,
-        X,
-        O
-    }
-    BoardState[,] board = new BoardState[3,3];
 
     // Use this for initialization
     void Awake()
@@ -59,7 +60,7 @@ public class ExampleServer : MonoBehaviour
         Debug.Log("Connection request from " + data.username);
 
         // We either need to approve a connection or deny it
-        //if (players.Count < 2)
+        if (gameState == GameState.pregame)
         {
             Player newPlayer = new Player();
             newPlayer.clientId = data.id;
@@ -70,12 +71,10 @@ public class ExampleServer : MonoBehaviour
 
             serverNet.ConnectionApproved(data.id);
         }
-        /*
         else
         {
             serverNet.ConnectionDenied(data.id);
         }
-        */
     }
 
     void OnClientConnected(long aClientId)
@@ -88,23 +87,9 @@ public class ExampleServer : MonoBehaviour
                 p.isConnected = true;
             }
         }
-
-        // Send the client the current state of the board
-        for (int i=0; i<board.GetLongLength(0); i++)
-        {
-            for (int j=0; j<board.GetLongLength(1); j++)
-            {
-                serverNet.CallRPC("UpdateGameState", aClientId, -1, i, j, (int)board[i, j]);
-            }
-        }
-
-        /*
-        serverNet.CallRPC("RPCTest", UCNetwork.MessageReceiver.AllClients, -1, 45);
-        ServerNetwork.ClientData data = serverNet.GetClientData(serverNet.SendingClientId);
-        serverNet.CallRPC("NewClientConnected", UCNetwork.MessageReceiver.AllClients, -1, aClientId, "bob");
-        */
     }
 
+    [RPCMethod]
     public void PlayerIsReady()
     {
         // Who called this RPC: serverNet.SendingClientId
@@ -130,40 +115,8 @@ public class ExampleServer : MonoBehaviour
         }
         if (allPlayersReady)
         {
-            // Tell the first player it's their turn
-            currentActivePlayer = 0;
-            serverNet.CallRPC("StartTurn", players[0].clientId, -1);
+            gameState = GameState.maingame;
         }
-
-        /*
-        ServerNetwork.ClientData data = serverNet.GetClientData(serverNet.SendingClientId);
-        serverNet.CallRPC("Whatever", UCNetwork.MessageReceiver.AllClients, -1);
-        //serverNet.Instantiate("Player", Vector3.zero, Quaternion.identity);
-        */
-    }
-
-    // Request from the client to take a turn
-    public void TakeTurn(int xPos, int yPos)
-    {
-        // Is it your turn?
-        // Is that spot open?
-        if (players[0].clientId == serverNet.SendingClientId)
-        {
-            board[xPos, yPos] = BoardState.X;
-        }
-        else
-        {
-            board[xPos, yPos] = BoardState.O;
-        }
-
-        // Check if you've won
-
-        // Tell the clients that the game has been updated
-        serverNet.CallRPC("UpdateGameState", UCNetwork.MessageReceiver.AllClients, -1, xPos, yPos, (int)board[xPos, yPos]);
-
-        // Tell the clients whose turn it is
-        currentActivePlayer = currentActivePlayer == 1 ? 0 : 1;
-        serverNet.CallRPC("StartTurn", players[currentActivePlayer].clientId, -1);
     }
 
     void OnClientDisconnected(long aClientId)
@@ -173,8 +126,7 @@ public class ExampleServer : MonoBehaviour
         {
             if (p.clientId == aClientId)
             {
-                p.isConnected = false;
-                p.isReady = false;
+                players.Remove(p);
             }
         }
     }

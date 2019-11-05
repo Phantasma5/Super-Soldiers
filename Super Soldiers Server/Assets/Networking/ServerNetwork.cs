@@ -1806,11 +1806,11 @@ public class ServerNetwork : UCNetwork
         // Loop through all the script components, finding a function
         MethodInfo theMethod = null;
         Component targetScript = null;
-        Component[] scripts = targetObject.GetComponents(typeof(MonoBehaviour));
+        Component[] scripts = SSRPCs.HelperFunctions.FilterScripts(targetObject.GetComponents(typeof(MonoBehaviour)));
         for (int i = 0; i < scripts.Length; i++)
         {
             theMethod = scripts[i].GetType().GetMethod(functionName);
-            if (theMethod != null)
+            if (theMethod != null && SSRPCs.HelperFunctions.CheckMethod(theMethod))
             {
                 targetScript = scripts[i];
                 break;
