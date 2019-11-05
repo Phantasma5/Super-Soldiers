@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using SSRPCs;
 
+[RPCClass]
 public class ExampleClient : MonoBehaviour
 {
     public ClientNetwork clientNet;
@@ -75,6 +77,7 @@ public class ExampleClient : MonoBehaviour
         // Update the visuals for the game
     }
 
+    [RPCMethod]
     public void RPCTest(int aInt)
     {
         Debug.Log("RPC Test has been called with " + aInt);
