@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] private BoxCollider2D myColldier;
     [HideInInspector] private NetworkSync myNetSync;
     [HideInInspector] private StatSystem myStatSystem;
+    [HideInInspector] private Inventory myInventory;
     #endregion
 
     #region Variables
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
         myColldier = GetComponent<BoxCollider2D>();
         myNetSync = GetComponent<NetworkSync>();
         myStatSystem = GetComponent<StatSystem>();
+        myInventory = GetComponent<Inventory>();
         if (myNetSync.owned)
         {
             References.player = this.gameObject;
@@ -90,6 +92,10 @@ public class PlayerController : MonoBehaviour
                 Jump();
                 jumpCD = Time.time + 0.1f;
             }
+        }
+        if(Input.GetButton("Fire"))
+        {
+            myInventory.Fire();
         }
     }
     private void Jump()
