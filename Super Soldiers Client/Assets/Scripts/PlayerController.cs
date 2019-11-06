@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         myInventory = GetComponent<Inventory>();
         if (myNetSync.owned)
         {
-            References.player = this.gameObject;
+            References.LocalPlayerReferences(this.gameObject);
         }
     }
 

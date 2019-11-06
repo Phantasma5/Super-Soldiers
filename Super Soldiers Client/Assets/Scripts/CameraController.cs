@@ -6,6 +6,6 @@ public class CameraController : MonoBehaviour
 {
     private void Update()
     {
-        transform.position = References.player.transform.position;
+        transform.position = References.localPlayer.transform.position;
     }
 }

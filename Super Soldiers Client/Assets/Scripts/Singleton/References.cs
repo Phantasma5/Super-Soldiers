@@ -5,8 +5,9 @@ using UnityEngine;
 public class References : MonoBehaviour
 {
     public static References instance;
-    public static GameObject player;
+    public static GameObject localPlayer;
     public static ExampleClient client;
+    public static StatSystem localStatSystem;
 
     private void Awake()
     {
@@ -22,6 +23,11 @@ public class References : MonoBehaviour
     private void FindReferences()
     {
         client = GetComponent<ExampleClient>();
+    }
+    public static void LocalPlayerReferences(GameObject aPlayer)
+    {
+        localPlayer = aPlayer;
+        localStatSystem = References.localPlayer.GetComponent<StatSystem>();
     }
     
 }
