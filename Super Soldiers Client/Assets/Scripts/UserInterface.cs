@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UserInterface : MonoBehaviour
 {
     #region References
     [SerializeField] private GameObject healthBar;
     [SerializeField] private GameObject fuelBar;
+    [SerializeField] private Text ammoTxt;
     #endregion
     #region Variables
     [HideInInspector] private bool CallbacksSet = false;
@@ -34,5 +36,13 @@ public class UserInterface : MonoBehaviour
         sca = fuelBar.transform.localScale;
         sca.x = aNewValue / References.localStatSystem.GetMaxValue(aStat);
         fuelBar.transform.localScale = sca;
+    }
+    public void UpdateAmmo(int aCur, int aMax)
+    {
+        ammoTxt.text = (aCur + "/" + aMax);
+        if(aMax > 10000)
+        {
+            ammoTxt.text = "Infinite";
+        }
     }
 }

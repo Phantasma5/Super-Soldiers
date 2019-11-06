@@ -210,8 +210,8 @@ MonoBehaviour:
     value: 100
     maxValue: 100
   - statType: 1
-    value: 150
-    maxValue: 150
+    value: 300
+    maxValue: 300
   - statType: 4
     value: 300
     maxValue: 300
@@ -230,3 +230,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0947f6f5ca34d1a41b8b4d73a5131503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon: 0
+  ammo: 0

@@ -8,6 +8,7 @@ public class References : MonoBehaviour
     public static GameObject localPlayer;
     public static ExampleClient client;
     public static StatSystem localStatSystem;
+    public static UserInterface userInterface;
 
     private void Awake()
     {
@@ -23,6 +24,7 @@ public class References : MonoBehaviour
     private void FindReferences()
     {
         client = GetComponent<ExampleClient>();
+        userInterface = GameObject.FindWithTag("UserInterface").GetComponent<UserInterface>();
     }
     public static void LocalPlayerReferences(GameObject aPlayer)
     {

@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
                 jumpCD = Time.time + 0.1f;
             }
         }
-        if(Input.GetButton("Fire"))
+        if(Input.GetButtonDown("Fire"))
         {
             myInventory.Fire();
         }
