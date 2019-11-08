@@ -39,13 +39,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        float dt = Time.deltaTime;
-        lapTime += dt;
-        if (lapTime > 3)
-        {
-            lapTime -= 3;
-            SendHiFive();
-        }
         if (myNetSync.owned)
         {
             if (knockback < Time.time)
@@ -100,6 +93,27 @@ public class PlayerController : MonoBehaviour
     }
     private void KeyPress()
     {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (typing)
+            {
+                References.userInterface.SendChat(typingAll);
+            }
+            else
+            {
+                References.userInterface.ChatboxEnable();
+            }
+            typing = !typing;
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                typingAll = true;
+            }
+            else
+            {
+                typingAll = false;
+            }
+        }
+
         if (typing)
         {
             return;
@@ -116,23 +130,7 @@ public class PlayerController : MonoBehaviour
         {
             myInventory.Fire();
         }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            if (typing)
-            {
-                References.userInterface.SendChat(typingAll);
-            }
-            typing = !typing;
-            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-            {
-                typingAll = true;
-            }
-            else
-            {
-                typingAll = false;
-            }
-            References.userInterface.ChatboxEnable();
-        }
+        
     }
     private void Jump()
     {
@@ -163,15 +161,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void SendHiFive()
-    {
-        clientNet.CallRPC("HiFive", UCNetwork.MessageReceiver.ServerOnly, -1, myNetSync.GetId());
-        Debug.Log("Sent Hi Five");
-    }
+    //private void SendHiFive()
+    //{
+    //    clientNet.CallRPC("HiFive", UCNetwork.MessageReceiver.ServerOnly, -1, myNetSync.GetId());
+    //    Debug.Log("Sent Hi Five");
+    //}
 
-    [RPCMethod]
-    public void ReceiveHiFive()
-    {
-        Debug.Log("Received Hi Five");
-    }
+    //[RPCMethod]
+    //public void ReceiveHiFive()
+    //{
+    //    Debug.Log("Received Hi Five");
+    //}
 }

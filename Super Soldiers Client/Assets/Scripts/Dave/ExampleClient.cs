@@ -59,18 +59,6 @@ public class ExampleClient : MonoBehaviour
         clientNet.Connect(aServerAddress, ClientNetwork.port, "", "", "", 0);
     }
 
-    // Update is called once per frame
-    void Update()
-    {        
-        timeToSend -= Time.deltaTime;
-        if (timeToSend <= 0)
-        {
-            SendChat(true, 0, "Testing Chat System");
-            //clientNet.CallRPC("RequestMove", UCNetwork.MessageReceiver.ServerOnly, -1, 1, 1, "x");
-            //clientNet.CallRPC("Blah", UCNetwork.MessageReceiver.ServerOnly, -1, 1, 1, "x");
-            timeToSend = 5.0f;
-        }        
-    }
 
     public void UpdateState(int x, int y, string player)
     {
@@ -166,7 +154,8 @@ public class ExampleClient : MonoBehaviour
         }
     }
 
-    void SendChat(bool global, int team, string message)
+    //SendChat(true, 0, "Testing Chat System"); 
+    public void SendChat(bool global, int team, string message)
     {
         clientNet.CallRPC("Chat", UCNetwork.MessageReceiver.ServerOnly, -1, global, team, message);
     }
@@ -183,7 +172,7 @@ public class ExampleClient : MonoBehaviour
         {
             channel = "team";
         }
-        Debug.Log("Received chat message from " + channel + " chat: " + message);
+        References.userInterface.UpdateChatLog(channel+": "+message);
     }
 }
 

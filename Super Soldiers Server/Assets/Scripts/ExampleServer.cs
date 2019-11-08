@@ -122,11 +122,11 @@ public class ExampleServer : MonoBehaviour
         }
     }
 
-    [RPCMethod]
-    public void HiFive(int id)
-    {
-        serverNet.CallRPC("ReceiveHiFive", serverNet.SendingClientId, id);
-    }
+    //[RPCMethod]
+    //public void HiFive(int id)
+    //{
+    //    serverNet.CallRPC("ReceiveHiFive", serverNet.SendingClientId, id);
+    //}
 
     void OnClientDisconnected(long aClientId)
     {
@@ -167,17 +167,6 @@ public class ExampleServer : MonoBehaviour
                     serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
                 }
             }
-        }
-    }
-
-    public void SendChat(bool all, string message)
-    {
-        if (all)
-        {
-            serverNet.CallRPC("ReceiveChat", UCNetwork.MessageReceiver.AllClients, -1, message);
-        }
-        else
-        {
         }
     }
 }

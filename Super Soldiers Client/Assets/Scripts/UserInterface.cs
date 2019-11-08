@@ -10,7 +10,7 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private GameObject fuelBar;
     [SerializeField] private Text ammoTxt;
     [SerializeField] private InputField inputTxtBox;
-    [SerializeField] private ScrollRect chatLog;
+    [SerializeField] private GameObject chatLog;
     #endregion
     #region Variables
     [HideInInspector] private bool CallbacksSet = false;
@@ -48,20 +48,26 @@ public class UserInterface : MonoBehaviour
     }
     public void ChatboxEnable()
     {
-        inputTxtBox.enabled = true;
+        inputTxtBox.gameObject.SetActive(true);
+        inputTxtBox.Select();
+        inputTxtBox.ActivateInputField();
     }
     public void SendChat(bool all)
     {
         string message = inputTxtBox.text;
         inputTxtBox.text = "";
-        inputTxtBox.enabled = false;
-        //TODO send rpc to server contianing message
+        inputTxtBox.gameObject.SetActive(false);
+        References.client.SendChat(all, 1, message);
     }
     public void UpdateChatLog(string message)
     {
         GameObject temp = new GameObject();
-        temp.AddComponent<Text>();
-        GameObject newMessage = Instantiate(temp, chatLog.gameObject.transform);
+        temp.AddComponent<CanvasRenderer>();
+        Text txt = temp.AddComponent<Text>();
+        txt.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;//https://stackoverflow.com/questions/30873343/how-to-set-a-font-for-a-ui-text-in-unity-3d-programmatically
+        temp.GetComponent<RectTransform>().sizeDelta = new Vector2(250,20);//width, height
+        
+        GameObject newMessage = Instantiate(temp, chatLog.transform);
         newMessage.GetComponent<Text>().text = message;
     }
 
