@@ -136,4 +136,12 @@ public class ExampleServer : MonoBehaviour
             }
         }
     }
+
+    private void Update()
+    {
+        foreach(var player in serverNet.GetAllObjects())
+        {
+
+        }
+    }
 }
