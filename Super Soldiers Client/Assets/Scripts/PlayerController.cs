@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     #region Variables
     [HideInInspector] private float knockback = 0;
     [HideInInspector] private float jumpCD = 0;
+    [HideInInspector] private bool typing = false;
+    [HideInInspector] private bool typingAll = false;
     #endregion
     private void Start()
     {
@@ -38,7 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         float dt = Time.deltaTime;
         lapTime += dt;
-        if(lapTime > 3)
+        if (lapTime > 3)
         {
             lapTime -= 3;
             SendHiFive();
@@ -60,7 +62,7 @@ public class PlayerController : MonoBehaviour
             if (myStatSystem.GetValue(StatSystem.StatType.Fuel) > 0)
             {
                 myRigidbody.AddForce(new Vector3(0, 700, 0) * Time.deltaTime);
-                if(myRigidbody.velocity.y > 5)
+                if (myRigidbody.velocity.y > 5)
                 {
                     Vector3 vel;
                     vel = myRigidbody.velocity;
@@ -81,7 +83,7 @@ public class PlayerController : MonoBehaviour
             if (null != hit.collider)//upward jump
             {
                 myStatSystem.AddValue(StatSystem.StatType.Fuel, 20 * Time.deltaTime);
-                if(myStatSystem.GetValue(StatSystem.StatType.Fuel) > myStatSystem.GetMaxValue(StatSystem.StatType.Fuel))
+                if (myStatSystem.GetValue(StatSystem.StatType.Fuel) > myStatSystem.GetMaxValue(StatSystem.StatType.Fuel))
                 {
                     myStatSystem.SetValue(StatSystem.StatType.Fuel, myStatSystem.GetMaxValue(StatSystem.StatType.Fuel));
                 }
@@ -97,6 +99,10 @@ public class PlayerController : MonoBehaviour
     }
     private void KeyPress()
     {
+        if (typing)
+        {
+            return;
+        }
         if (Input.GetButton("Jump"))
         {
             if (jumpCD < Time.time)
@@ -105,9 +111,26 @@ public class PlayerController : MonoBehaviour
                 jumpCD = Time.time + 0.1f;
             }
         }
-        if(Input.GetButtonDown("Fire"))
+        if (Input.GetButtonDown("Fire"))
         {
             myInventory.Fire();
+        }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (typing)
+            {
+                References.userInterface.SendChat(typingAll);
+            }
+            typing = !typing;
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                typingAll = true;
+            }
+            else
+            {
+                typingAll = false;
+            }
+            References.userInterface.ChatboxEnable();
         }
     }
     private void Jump()

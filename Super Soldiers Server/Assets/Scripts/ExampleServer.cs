@@ -144,4 +144,17 @@ public class ExampleServer : MonoBehaviour
 
         }
     }
+
+    [RPCMethod]
+    public void SendChat(bool all, string message)
+    {
+        if(all)
+        {
+            serverNet.CallRPC("ReceiveChat", serverNet.SendingClientId, message);
+        }
+        else
+        {
+
+        }
+    }
 }
