@@ -78,7 +78,7 @@ public class ExampleClient : MonoBehaviour
     }
 
     [RPCMethod]
-    public void RPCTest(int aInt)
+    public void TestRPC(int aInt)
     {
         Debug.Log("RPC Test has been called with " + aInt);
     }

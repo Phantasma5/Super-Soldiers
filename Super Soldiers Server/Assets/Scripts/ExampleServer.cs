@@ -8,7 +8,7 @@ using SSRPCs;
 
 [RPCClass]
 public class ExampleServer : MonoBehaviour
-{
+{    
     public enum GameState
     {
         pregame,
@@ -117,6 +117,12 @@ public class ExampleServer : MonoBehaviour
         {
             gameState = GameState.maingame;
         }
+    }
+
+    [RPCMethod]
+    public void HiFive(int id)
+    {
+        serverNet.CallRPC("ReceiveHiFive", serverNet.SendingClientId, id);
     }
 
     void OnClientDisconnected(long aClientId)

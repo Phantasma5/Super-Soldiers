@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SSRPCs;
 
+[RPCClass]
 public class PlayerController : MonoBehaviour
 {
     #region References
@@ -10,6 +12,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] private NetworkSync myNetSync;
     [HideInInspector] private StatSystem myStatSystem;
     [HideInInspector] private Inventory myInventory;
+    ClientNetwork clientNet;
+    float lapTime = 0;
     #endregion
 
     #region Variables
@@ -18,6 +22,7 @@ public class PlayerController : MonoBehaviour
     #endregion
     private void Start()
     {
+        clientNet = FindObjectOfType<ClientNetwork>();
         myRigidbody = GetComponent<Rigidbody2D>();
         myColldier = GetComponent<BoxCollider2D>();
         myNetSync = GetComponent<NetworkSync>();
@@ -31,6 +36,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        float dt = Time.deltaTime;
+        lapTime += dt;
+        if(lapTime > 3)
+        {
+            lapTime -= 3;
+            SendHiFive();
+        }
         if (myNetSync.owned)
         {
             if (knockback < Time.time)
@@ -125,5 +137,17 @@ public class PlayerController : MonoBehaviour
             knockback = Time.time + 1;
             return;
         }
+    }
+
+    private void SendHiFive()
+    {
+        clientNet.CallRPC("HiFive", UCNetwork.MessageReceiver.ServerOnly, -1, myNetSync.GetId());
+        Debug.Log("Sent Hi Five");
+    }
+
+    [RPCMethod]
+    public void ReceiveHiFive()
+    {
+        Debug.Log("Received Hi Five");
     }
 }
