@@ -6,6 +6,10 @@ public class CameraController : MonoBehaviour
 {
     private void Update()
     {
-        transform.position = References.localPlayer.transform.position;
+        if(null == References.localPlayer)
+        {
+            return;
+        }
+        transform.position = new Vector3(References.localPlayer.transform.position.x, References.localPlayer.transform.position.y, -10);
     }
 }
