@@ -132,7 +132,7 @@ public class ExampleClient : MonoBehaviour
         Debug.Log("OnChangeArea called");
 
         // Tell the server we are ready
-        myPlayer = clientNet.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        myPlayer = clientNet.Instantiate("Player", new Vector3(Random.Range(-10,10), 0, 0), Quaternion.identity);
         myPlayer.GetComponent<NetworkSync>().AddToArea(1);
     }
 
