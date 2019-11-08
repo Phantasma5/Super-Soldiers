@@ -231,7 +231,7 @@ public class ServerNetwork : UCNetwork
                     // Transfer ownership of the objects that do not follow the client
                     foreach (int areaId in areaIds)
                     {
-                        FindNewOwners(clientData[i], areaId);
+                        //FindNewOwners(clientData[i], areaId);
                     }
 
                     // Destroy any objects that are going away with this client
@@ -876,7 +876,7 @@ public class ServerNetwork : UCNetwork
         Debug.Log("Client " + aClientId + " removed from area " + aAreaId);
 
         // Find new owners for these objects
-        FindNewOwners(client, aAreaId);
+        //FindNewOwners(client, aAreaId);
 
         NetOutgoingMessage sendMsg;
         // Tell the client to destroy any objects it is no longer in an area with

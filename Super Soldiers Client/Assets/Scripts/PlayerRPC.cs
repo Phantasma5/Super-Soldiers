@@ -19,4 +19,9 @@ public class PlayerRPC : MonoBehaviour
     {
         myInventory.weapon = (Inventory.WeaponType)aWeapon;
     }
+    [RPCMethod]
+    public void ReceiveChat(string message)
+    {
+        References.userInterface.UpdateChatLog(message);
+    }
 }

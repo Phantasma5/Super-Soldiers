@@ -8,7 +8,7 @@ using SSRPCs;
 
 [RPCClass]
 public class ExampleServer : MonoBehaviour
-{    
+{
     public enum GameState
     {
         pregame,
@@ -24,7 +24,7 @@ public class ExampleServer : MonoBehaviour
     public ServerNetwork serverNet;
 
     public int portNumber = 603;
-    
+
     // Stores a player
     class Player
     {
@@ -142,7 +142,7 @@ public class ExampleServer : MonoBehaviour
 
     private void Update()
     {
-        foreach(var player in serverNet.GetAllObjects())
+        foreach (var player in serverNet.GetAllObjects())
         {
 
         }
@@ -151,9 +151,9 @@ public class ExampleServer : MonoBehaviour
     [RPCMethod]
     public void Chat(bool global, int team, string message)
     {
-        if(global)
+        if (global)
         {
-            foreach(Player p in players)
+            foreach (Player p in players)
             {
                 serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
             }
@@ -162,11 +162,22 @@ public class ExampleServer : MonoBehaviour
         {
             foreach (Player p in players)
             {
-                if(p.team == team)
+                if (p.team == team)
                 {
                     serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
                 }
             }
+        }
+    }
+
+    public void SendChat(bool all, string message)
+    {
+        if (all)
+        {
+            serverNet.CallRPC("ReceiveChat", UCNetwork.MessageReceiver.AllClients, -1, message);
+        }
+        else
+        {
         }
     }
 }
