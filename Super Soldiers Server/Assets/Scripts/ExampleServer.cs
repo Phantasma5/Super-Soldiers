@@ -17,6 +17,8 @@ public class ExampleServer : MonoBehaviour
     }
     public static GameState gameState = GameState.pregame;
 
+    public bool teamGame = true;
+
     public static ExampleServer instance;
 
     public ServerNetwork serverNet;
@@ -30,6 +32,7 @@ public class ExampleServer : MonoBehaviour
         public string playerName;
         public bool isReady;
         public bool isConnected;
+        public int team;
     }
     List<Player> players = new List<Player>();
     int currentActivePlayer;
@@ -142,6 +145,28 @@ public class ExampleServer : MonoBehaviour
         foreach(var player in serverNet.GetAllObjects())
         {
 
+        }
+    }
+
+    [RPCMethod]
+    public void Chat(bool global, int team, string message)
+    {
+        if(global)
+        {
+            foreach(Player p in players)
+            {
+                serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
+            }
+        }
+        else
+        {
+            foreach (Player p in players)
+            {
+                if(p.team == team)
+                {
+                    serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
+                }
+            }
         }
     }
 }

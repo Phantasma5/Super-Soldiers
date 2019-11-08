@@ -13,12 +13,13 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] private StatSystem myStatSystem;
     [HideInInspector] private Inventory myInventory;
     ClientNetwork clientNet;
-    float lapTime = 0;
     #endregion
 
     #region Variables
     [HideInInspector] private float knockback = 0;
     [HideInInspector] private float jumpCD = 0;
+    float lapTime = 0;
+    public int team = 0;
     #endregion
     private void Start()
     {

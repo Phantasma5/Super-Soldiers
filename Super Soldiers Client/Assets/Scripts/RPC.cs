@@ -22,17 +22,17 @@ namespace SSRPCs
 
     public struct HelperFunctions
     {
-        //check a method for the RPC flag
+        //check a method for the RPCMethod flag
         public static bool CheckMethod(MethodInfo methodInfo)
         {
             return Attribute.IsDefined(methodInfo, typeof(RPCMethod));
         }
-        //check a class for the HasRPCs flag
+        //check a class for the RPCClass flag
         public static bool CheckClass(Type type)
         {
             return Attribute.IsDefined(type, typeof(RPCClass));
         }
-        //Go through a list of components and return the ones that have the HasRPCs flag
+        //Go through a list of components and return the ones that have the RPCClass flag
         public static Component[] FilterScripts(Component[] components)
         {
             List<Component> returnMe = new List<Component>();

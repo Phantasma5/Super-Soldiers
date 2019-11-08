@@ -9,6 +9,7 @@ using SSRPCs;
 public class ExampleClient : MonoBehaviour
 {
     public ClientNetwork clientNet;
+    float timeToSend = 5.0f;
 
     // Get the instance of the client
     static ExampleClient instance = null;
@@ -60,16 +61,15 @@ public class ExampleClient : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        /*
+    {        
         timeToSend -= Time.deltaTime;
         if (timeToSend <= 0)
         {
-            clientNet.CallRPC("RequestMove", UCNetwork.MessageReceiver.ServerOnly, -1, 1, 1, "x");
-            clientNet.CallRPC("Blah", UCNetwork.MessageReceiver.ServerOnly, -1, 1, 1, "x");
-            timeToSend = 10;
-        }
-        */
+            SendChat(true, 0, "Testing Chat System");
+            //clientNet.CallRPC("RequestMove", UCNetwork.MessageReceiver.ServerOnly, -1, 1, 1, "x");
+            //clientNet.CallRPC("Blah", UCNetwork.MessageReceiver.ServerOnly, -1, 1, 1, "x");
+            timeToSend = 5.0f;
+        }        
     }
 
     public void UpdateState(int x, int y, string player)
@@ -164,6 +164,26 @@ public class ExampleClient : MonoBehaviour
         {
             clientNet.Disconnect("Peace out");
         }
+    }
+
+    void SendChat(bool global, int team, string message)
+    {
+        clientNet.CallRPC("Chat", UCNetwork.MessageReceiver.ServerOnly, -1, global, team, message);
+    }
+
+    [RPCMethod]
+    public void ReceiveChat(bool global, string message)
+    {
+        string channel = "";
+        if(global)
+        {
+            channel = "all";
+        }
+        else
+        {
+            channel = "team";
+        }
+        Debug.Log("Received chat message from " + channel + " chat: " + message);
     }
 }
 
