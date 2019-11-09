@@ -11,6 +11,9 @@ public class ExampleClient : MonoBehaviour
     public ClientNetwork clientNet;
     float timeToSend = 5.0f;
 
+    public string pregame;
+    public string maingame;
+
     // Get the instance of the client
     static ExampleClient instance = null;
     
@@ -68,7 +71,7 @@ public class ExampleClient : MonoBehaviour
     [RPCMethod]
     public void TestRPC(int aInt)
     {
-        Debug.Log("RPC Test has been called with " + aInt);
+        Debug.Log("RPC Test has been called with " + aInt.ToString());
     }
 
     public void NewClientConnected(long aClientId, string aValue)
@@ -118,7 +121,7 @@ public class ExampleClient : MonoBehaviour
     void OnNetStatusDisconnected()
     {
         Debug.Log("OnNetStatusDisconnected called");
-        SceneManager.LoadScene("Client");
+        SceneManager.LoadScene(pregame);
         
         loginInProcess = false;
 
@@ -173,6 +176,35 @@ public class ExampleClient : MonoBehaviour
             channel = "team";
         }
         References.userInterface.UpdateChatLog(channel+": "+message);
+    }
+
+    [RPCMethod]
+    public void TransitionToGame()
+    {
+        SceneManager.LoadScene(maingame);
+        foreach(var p in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            p.transform.position = new Vector3(
+                p.transform.position.x,
+                0,
+                p.transform.position.z);
+        }
+    }
+
+    [RPCMethod]
+    public void TransitionToLobby()
+    {
+        SceneManager.LoadScene(pregame);
+    }
+
+    public void ReadyUpTeamGame()
+    {
+
+    }
+
+    public void ReadyUpFFA()
+    {
+
     }
 }
 

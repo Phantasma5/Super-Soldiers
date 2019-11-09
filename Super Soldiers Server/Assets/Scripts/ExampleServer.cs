@@ -33,6 +33,7 @@ public class ExampleServer : MonoBehaviour
         public bool isReady;
         public bool isConnected;
         public int team;
+        public float health;
     }
     List<Player> players = new List<Player>();
     int currentActivePlayer;
@@ -118,15 +119,21 @@ public class ExampleServer : MonoBehaviour
         }
         if (allPlayersReady)
         {
-            gameState = GameState.maingame;
+            RunGame();
         }
     }
 
-    //[RPCMethod]
-    //public void HiFive(int id)
-    //{
-    //    serverNet.CallRPC("ReceiveHiFive", serverNet.SendingClientId, id);
-    //}
+    private void RunGame()
+    {
+        serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
+        gameState = GameState.maingame;
+    }
+
+    private void EndGame()
+    {
+        serverNet.CallRPC("TransitionToLobby", UCNetwork.MessageReceiver.AllClients, -1);
+        gameState = GameState.pregame;
+    }
 
     void OnClientDisconnected(long aClientId)
     {
@@ -142,10 +149,25 @@ public class ExampleServer : MonoBehaviour
 
     private void Update()
     {
-        foreach (var player in serverNet.GetAllObjects())
+        if (teamGame)
         {
 
         }
+        else
+        {
+            int livePlayers = 0;
+            foreach (var player in players)
+            {
+                if(player.health > 0)
+                {
+                    livePlayers++;
+                }
+            }
+            if(livePlayers <=1)
+            {
+                EndGame();
+            }
+        }        
     }
 
     [RPCMethod]
@@ -153,10 +175,11 @@ public class ExampleServer : MonoBehaviour
     {
         if (global)
         {
-            foreach (Player p in players)
-            {
-                serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
-            }
+            //foreach (Player p in players)
+            //{
+            //    serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
+            //}
+            serverNet.CallRPC("ReceiveChat", UCNetwork.MessageReceiver.AllClients, -1, global, message);
         }
         else
         {
