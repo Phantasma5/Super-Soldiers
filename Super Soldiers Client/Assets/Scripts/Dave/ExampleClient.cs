@@ -22,7 +22,11 @@ public class ExampleClient : MonoBehaviour
 
     public GameObject loginScreen;
 
+    public GameObject lobbyScreen;
+
     public GameObject myPlayer;
+
+    public int weapon = 0;
 
     // Singleton support
     public static ExampleClient GetInstance()
@@ -104,6 +108,7 @@ public class ExampleClient : MonoBehaviour
     void OnNetStatusConnected()
     {
         loginScreen.SetActive(false);
+        lobbyScreen.SetActive(true);
         Debug.Log("OnNetStatusConnected called");
 
         clientNet.AddToArea(1);
@@ -199,12 +204,17 @@ public class ExampleClient : MonoBehaviour
 
     public void ReadyUpTeamGame()
     {
-
+        clientNet.CallRPC("PlayerIsReady", UCNetwork.MessageReceiver.ServerOnly, -1, weapon, true);
     }
 
     public void ReadyUpFFA()
     {
-
+        clientNet.CallRPC("PlayerIsReady", UCNetwork.MessageReceiver.ServerOnly, -1, weapon, false);
+    }
+    [RPCMethod]
+    public void SetTeam(int team)
+    {
+        myPlayer.GetComponent<PlayerController>().team = team;
     }
 }
 

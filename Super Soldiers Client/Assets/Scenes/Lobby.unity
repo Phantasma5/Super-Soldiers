@@ -330,6 +330,7 @@ MonoBehaviour:
   server: {fileID: 575254262}
   port: {fileID: 612112024}
   client: {fileID: 1385401858}
+  lobbyCanvas: {fileID: 461449126}
 --- !u!4 &210303733
 Transform:
   m_ObjectHideFlags: 0
@@ -362,7 +363,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &248918550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,6 +540,7 @@ GameObject:
   - component: {fileID: 393346512}
   - component: {fileID: 393346511}
   - component: {fileID: 393346516}
+  - component: {fileID: 393346517}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -639,6 +641,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a81772508f9f304fb2bd33f8def2737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &393346517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393346510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b56fe3ce2ed3182448e23ef844cdf73e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &461449126
 GameObject:
   m_ObjectHideFlags: 0
@@ -657,7 +671,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &461449127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1687,7 +1701,18 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1171982398}
+        m_MethodName: ValueChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &922784728
 MonoBehaviour:
@@ -1883,7 +1908,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 976058686}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1385401858}
+        m_MethodName: ReadyUpTeamGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &976058686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1931,6 +1967,7 @@ GameObject:
   - component: {fileID: 1062293812}
   - component: {fileID: 1062293811}
   - component: {fileID: 1062293813}
+  - component: {fileID: 1062293814}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2022,6 +2059,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a81772508f9f304fb2bd33f8def2737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1062293814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1062293810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b56fe3ce2ed3182448e23ef844cdf73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1109608023
@@ -2247,6 +2296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 312fefaed4c9a2043b6036b52e4a40ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponSelect: {fileID: 922784727}
 --- !u!4 &1171982399
 Transform:
   m_ObjectHideFlags: 0
@@ -2827,6 +2877,7 @@ GameObject:
   - component: {fileID: 1385401859}
   - component: {fileID: 1385401860}
   - component: {fileID: 1385401861}
+  - component: {fileID: 1385401862}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -2861,10 +2912,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clientNet: {fileID: 0}
-  pregame: 
-  maingame: 
+  pregame: Lobby
+  maingame: Client
   loginScreen: {fileID: 248918549}
+  lobbyScreen: {fileID: 461449126}
   myPlayer: {fileID: 0}
+  weapon: 0
 --- !u!114 &1385401859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2902,6 +2955,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5a81772508f9f304fb2bd33f8def2737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1385401862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385401856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b56fe3ce2ed3182448e23ef844cdf73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1443252314
@@ -3570,7 +3635,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2066303163}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1385401858}
+        m_MethodName: ReadyUpFFA
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2066303163
 MonoBehaviour:
   m_ObjectHideFlags: 0

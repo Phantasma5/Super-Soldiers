@@ -7,12 +7,14 @@ public class TitleScreenLogic : MonoBehaviour {
     public Text server;
     public Text port;
     public ExampleClient client;
+    public GameObject lobbyCanvas;
 
     private void Start()
     {
         if(client.clientNet.IsConnected())
         {
             client.loginScreen.SetActive(false);
+            lobbyCanvas.SetActive(true);
         }
     }
 

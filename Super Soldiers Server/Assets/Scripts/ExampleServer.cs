@@ -34,6 +34,8 @@ public class ExampleServer : MonoBehaviour
         public bool isConnected;
         public int team;
         public float health;
+        public int weapon;
+        public bool teamVote;
     }
     List<Player> players = new List<Player>();
     int currentActivePlayer;
@@ -94,7 +96,7 @@ public class ExampleServer : MonoBehaviour
     }
 
     [RPCMethod]
-    public void PlayerIsReady()
+    public void PlayerIsReady(int weapon, bool teamGame)
     {
         // Who called this RPC: serverNet.SendingClientId
         Debug.Log("Player is ready");
@@ -105,6 +107,8 @@ public class ExampleServer : MonoBehaviour
             if (p.clientId == serverNet.SendingClientId)
             {
                 p.isReady = true;
+                p.weapon = weapon;
+                p.teamVote = teamGame;
             }
         }
 
@@ -125,6 +129,26 @@ public class ExampleServer : MonoBehaviour
 
     private void RunGame()
     {
+        bool teamGame = false;
+        int teamVotes = 0;
+        foreach(var p in players)
+        {
+            if(p.teamVote)
+            {
+                teamVotes++;
+            }
+        }
+        if(teamVotes >= players.Count / 2)
+        {
+            for(int i = 0; i < players.Count; i++)
+            {
+                serverNet.CallRPC("SetTeam", players[i].clientId, -1, i % 2);
+            }
+        }
+        else
+        {
+            serverNet.CallRPC("SetTeam", UCNetwork.MessageReceiver.AllClients, -1, -1);
+        }
         serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
         gameState = GameState.maingame;
     }
