@@ -223,6 +223,10 @@ public class ExampleClient : MonoBehaviour
     public void SetTeam(int team)
     {
         myPlayer.GetComponent<PlayerController>().team = team;
+    }    
+    public void GimmeAGun()
+    {
+        clientNet.CallRPC("EquipPlayer", UCNetwork.MessageReceiver.ServerOnly, -1, myPlayer.GetComponent<NetworkSync>().GetId());
     }
 }
 

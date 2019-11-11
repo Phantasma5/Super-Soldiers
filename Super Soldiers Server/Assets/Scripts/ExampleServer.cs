@@ -155,7 +155,7 @@ public class ExampleServer : MonoBehaviour
                 p.team = -1;
             }
             serverNet.CallRPC("SetTeam", UCNetwork.MessageReceiver.AllClients, -1, -1);
-        }
+        }        
         serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
         gameState = GameState.maingame;
     }
@@ -257,5 +257,19 @@ public class ExampleServer : MonoBehaviour
             }
         }
         return false;
+    }
+
+    [RPCMethod]
+    public void EquipPlayer(int netObId)
+    {
+        int weapon = 0;
+        foreach (var p in players)
+        {
+            if(p.clientId == serverNet.SendingClientId)
+            {
+                weapon = p.weapon;
+            }
+        }
+        serverNet.CallRPC("SelectWeapon", UCNetwork.MessageReceiver.AllClients, netObId, weapon);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,13 +24,38 @@ public class References : MonoBehaviour
     }
     private void FindReferences()
     {
-        client = GetComponent<ExampleClient>();
-        userInterface = GameObject.FindWithTag("UserInterface").GetComponent<UserInterface>();
+        try
+        {
+            client = GetComponent<ExampleClient>();
+            userInterface = GameObject.FindWithTag("UserInterface").GetComponent<UserInterface>();
+        }
+        catch(Exception e)
+        {
+            Debug.Log(e.Message);
+        }
     }
     public static void LocalPlayerReferences(GameObject aPlayer)
     {
         localPlayer = aPlayer;
         localStatSystem = References.localPlayer.GetComponent<StatSystem>();
     }
-    
+
+    private void Update()
+    {
+        if (client == null || userInterface == null)
+        {
+            try
+            {
+                FindReferences();
+            }
+            catch(Exception e)
+            {
+                Debug.Log(e.Message);
+            }
+        }
+        if(localPlayer != null && localStatSystem == null)
+        {
+            LocalPlayerReferences(localPlayer);
+        }
+    }
 }
