@@ -18,6 +18,7 @@ public class ExampleServer : MonoBehaviour
     public static GameState gameState = GameState.pregame;
 
     public bool teamGame = true;
+    public int teams = 2;
 
     public static ExampleServer instance;
 
@@ -121,7 +122,7 @@ public class ExampleServer : MonoBehaviour
                 allPlayersReady = false;
             }
         }
-        if (allPlayersReady)
+        if (allPlayersReady && players.Count > 1)
         {
             RunGame();
         }
@@ -129,7 +130,6 @@ public class ExampleServer : MonoBehaviour
 
     private void RunGame()
     {
-        bool teamGame = false;
         int teamVotes = 0;
         foreach(var p in players)
         {
@@ -140,13 +140,20 @@ public class ExampleServer : MonoBehaviour
         }
         if(teamVotes >= players.Count / 2)
         {
+            teamGame = true;
             for(int i = 0; i < players.Count; i++)
             {
+                players[i].team = i % 2;
                 serverNet.CallRPC("SetTeam", players[i].clientId, -1, i % 2);
             }
         }
         else
         {
+            teamGame = false;
+            foreach(var p in players)
+            {
+                p.team = -1;
+            }
             serverNet.CallRPC("SetTeam", UCNetwork.MessageReceiver.AllClients, -1, -1);
         }
         serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
@@ -173,25 +180,31 @@ public class ExampleServer : MonoBehaviour
 
     private void Update()
     {
-        if (teamGame)
-        {
-
-        }
-        else
-        {
-            int livePlayers = 0;
-            foreach (var player in players)
-            {
-                if(player.health > 0)
-                {
-                    livePlayers++;
-                }
-            }
-            if(livePlayers <=1)
-            {
-                EndGame();
-            }
-        }        
+        //if (gameState == GameState.maingame)
+        //{
+        //    if (teamGame)
+        //    {
+        //        int remainingTeams = 0;
+        //        for (int i = 0; i < teams; i++)
+        //        {
+        //            if (LivePlayersOnTeam(i))
+        //            {
+        //                remainingTeams++;
+        //            }
+        //        }
+        //        if (remainingTeams <= 1)
+        //        {
+        //            EndGame();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (!MultipleLivePlayers())
+        //        {
+        //            EndGame();
+        //        }
+        //    }
+        //}
     }
 
     [RPCMethod]
@@ -215,5 +228,34 @@ public class ExampleServer : MonoBehaviour
                 }
             }
         }
+    }
+
+    public bool LivePlayersOnTeam(int team)
+    {
+        foreach(var p in players)
+        {
+            if(p.team == team && p.health > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool MultipleLivePlayers()
+    {
+        int alive = 0;
+        foreach(var p in players)
+        {
+            if(p.health > 0)
+            {
+                alive++;
+                if(alive > 1)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

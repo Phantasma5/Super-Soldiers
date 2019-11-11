@@ -42,6 +42,14 @@ public class ExampleClient : MonoBehaviour
     // Use this for initialization
     void Awake()
     {
+        if (instance == null || instance == this)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         // Make sure we have a ClientNetwork to use
         if (clientNet == null)
         {
@@ -140,7 +148,7 @@ public class ExampleClient : MonoBehaviour
         Debug.Log("OnChangeArea called");
 
         // Tell the server we are ready
-        myPlayer = clientNet.Instantiate("Player", new Vector3(Random.Range(-10,10), 0, 0), Quaternion.identity);
+        myPlayer = clientNet.Instantiate("Player", new Vector3(Random.Range(-2,2), 3, 0), Quaternion.identity);
         myPlayer.GetComponent<NetworkSync>().AddToArea(1);
     }
 
