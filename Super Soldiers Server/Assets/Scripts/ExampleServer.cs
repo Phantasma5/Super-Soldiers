@@ -271,5 +271,5 @@ public class ExampleServer : MonoBehaviour
             }
         }
         serverNet.CallRPC("SelectWeapon", UCNetwork.MessageReceiver.AllClients, netObId, weapon);
-    }
+    }    
 }

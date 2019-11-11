@@ -28,7 +28,7 @@ public class ServerNetwork : UCNetwork
         public int netObjId;
     }
 
-    public class IntantiateObjectData
+    public class InstantiateObjectData
     {
         public int netObjId;
         public object data;
@@ -741,7 +741,7 @@ public class ServerNetwork : UCNetwork
 
                 networkObjects[networkId] = newObject;
                 // Let any other scripts on this object know we're adding the object
-                IntantiateObjectData iod = new IntantiateObjectData();
+                InstantiateObjectData iod = new InstantiateObjectData();
                 iod.netObjId = networkId;
                 SendMessage("OnInstantiateNetworkObject", iod);
             }
@@ -1022,16 +1022,16 @@ public class ServerNetwork : UCNetwork
     // aSpawnedByServer - If this object has been spawned by the server
     NetworkObject InstantiateNetworkObject(string aPrefabName, Vector3 aPostion, Quaternion aOrientation, long aClientIdentifier, int aNetworkId, bool aSpawnedByServer, string aObjectJson, object aData = null)
     {
-        /*
+
         Debug.Log("Instantiate for client - " + aClientIdentifier
                 + "\n\tNetworkId: " + aNetworkId
                 + "\n\tPrefab: " + aPrefabName
                 + "\n\tLoc: " + aPostion.ToString()
                 + "\n\tOrientation: " + aOrientation.eulerAngles.ToString()
                 );
-                */
+
         // Create the message that will be sent to the clients
-        /*
+        
         NetOutgoingMessage sendMsg = server.CreateMessage();
         sendMsg.Write((int)MessageType.Instantiate);
         sendMsg.Write(aNetworkId);
@@ -1066,9 +1066,7 @@ public class ServerNetwork : UCNetwork
                     break;
                 }
             }
-        }
-        */
-
+        }       
 
         // Set up our own logic for tracking which clients own which objects
         foreach (ClientData data in clientData)
@@ -1079,7 +1077,7 @@ public class ServerNetwork : UCNetwork
 
                 if (aSpawnedByServer)
                 {
-                    NetOutgoingMessage sendMsg = server.CreateMessage();
+                    sendMsg = server.CreateMessage();
                     sendMsg.Write((int)MessageType.Instantiate);
                     sendMsg.Write(aNetworkId);
                     sendMsg.Write(aPrefabName);
@@ -1125,7 +1123,7 @@ public class ServerNetwork : UCNetwork
         networkObjects[aNetworkId] = newObject;
 
         // Let any other scripts on this object know we're adding the object
-        IntantiateObjectData iod = new IntantiateObjectData();
+        InstantiateObjectData iod = new InstantiateObjectData();
         iod.netObjId = aNetworkId;
         iod.data = aData;
         SendMessage("OnInstantiateNetworkObject", iod);

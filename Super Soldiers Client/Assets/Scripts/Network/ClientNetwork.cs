@@ -633,6 +633,7 @@ public class ClientNetwork : UCNetwork
 
     private GameObject CreateLocalObject(string aPrefabName, Vector3 aPosition, Quaternion aOrientation, int aNetId)
     {
+        Debug.Log("Received a message to spawn " + aPrefabName);
         // Create the object locally
         GameObject newObj = Instantiate(Resources.Load(aPrefabName), aPosition, aOrientation) as GameObject;
         if (newObj == null)
