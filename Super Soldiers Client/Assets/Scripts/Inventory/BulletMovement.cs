@@ -9,6 +9,7 @@ public class BulletMovement : MonoBehaviour
     #endregion
     #region Variables
     [SerializeField] private float speed;
+    [SerializeField] float ttl = 2.0f;
     #endregion
     void Start()
     {
@@ -17,6 +18,11 @@ public class BulletMovement : MonoBehaviour
 
     void Update()
     {
+        ttl -= Time.deltaTime;
         myRigidbody.velocity = transform.forward * speed;
+        if(ttl <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

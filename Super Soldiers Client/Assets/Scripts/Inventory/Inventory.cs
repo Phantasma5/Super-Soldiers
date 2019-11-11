@@ -70,8 +70,8 @@ public class Inventory : MonoBehaviour
         Transform tempTrans = tempObj.transform;
         tempTrans.position = transform.position;
         tempTrans.LookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        var temp = ClientNetwork.Instantiate(Resources.Load("BulletAR"), tempTrans);
-        Destroy(temp, 2);
+        var temp = ExampleClient.GetInstance().clientNet.Instantiate("BulletAR", tempTrans.position, tempTrans.rotation);
+        //Destroy(temp, 2);
         //TODO: CD based on weapon
     }
     private void UpdateAmmo()
