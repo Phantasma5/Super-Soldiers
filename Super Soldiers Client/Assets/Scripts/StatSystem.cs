@@ -52,12 +52,16 @@ public class StatSystem : MonoBehaviour
         {
             if (s.statType == aStatType)
             {
+                if (s.value == aValue)
+                {
+                    return;
+                }
                 float old = aValue;
                 s.value = aValue;
 
                 if (statCallbacks.ContainsKey(s.statType))
                 {
-                   statCallbacks[s.statType](s.statType, old, s.value);
+                    statCallbacks[s.statType](s.statType, old, s.value);
                 }
 
                 break;
@@ -76,7 +80,7 @@ public class StatSystem : MonoBehaviour
 
                 if (statCallbacks.ContainsKey(s.statType))
                 {
-                   statCallbacks[s.statType](s.statType, old, s.value);
+                    statCallbacks[s.statType](s.statType, old, s.value);
                 }
 
                 break;
