@@ -1033,40 +1033,41 @@ public class ServerNetwork : UCNetwork
         // Create the message that will be sent to the clients
         
         NetOutgoingMessage sendMsg = server.CreateMessage();
-        sendMsg.Write((int)MessageType.Instantiate);
-        sendMsg.Write(aNetworkId);
-        sendMsg.Write(aPrefabName);
-        sendMsg.Write(aPostion.x);
-        sendMsg.Write(aPostion.y);
-        sendMsg.Write(aPostion.z);
-        sendMsg.Write(aOrientation.x);
-        sendMsg.Write(aOrientation.y);
-        sendMsg.Write(aOrientation.z);
-        sendMsg.Write(aOrientation.w);
+        //sendMsg.Write((int)MessageType.Instantiate);
+        //sendMsg.Write(aNetworkId);
+        //sendMsg.Write(aPrefabName);
+        //sendMsg.Write(aPostion.x);
+        //sendMsg.Write(aPostion.y);
+        //sendMsg.Write(aPostion.z);
+        //sendMsg.Write(aOrientation.x);
+        //sendMsg.Write(aOrientation.y);
+        //sendMsg.Write(aOrientation.z);
+        //sendMsg.Write(aOrientation.w);
+        //sendMsg.Write("");
 
-        // Get the clients in the area
-        // If aSpawnedByServer == true, sending the data to the owner client == true
-        List<NetConnection> clients = GetClientsInArea(aClientIdentifier, aSpawnedByServer);
-        if (clients.Count > 0)
-        {
-            server.SendMessage(sendMsg, clients, NetDeliveryMethod.ReliableOrdered, 0);
-        }
+        //// Get the clients in the area
+        //// If aSpawnedByServer == true, sending the data to the owner client == true
+        //List<NetConnection> clients = GetClientsInArea(aClientIdentifier, aSpawnedByServer);
+        //if (clients.Count > 0)
+        //{
+        //    server.SendMessage(sendMsg, clients, NetDeliveryMethod.ReliableOrdered, 0);
+        //}
 
-        // Tell the owner client that they own it, if it was created by the server
-        if (aSpawnedByServer)
-        {
-            foreach (ClientData client in clientData)
-            {
-                if (client.networkIdentifier == aClientIdentifier)
-                {
-                    sendMsg = server.CreateMessage();
-                    sendMsg.Write((int)MessageType.OwnershipGained);
-                    sendMsg.Write(aNetworkId);
-                    server.SendMessage(sendMsg, client.connection, NetDeliveryMethod.ReliableOrdered);
-                    break;
-                }
-            }
-        }       
+        //// Tell the owner client that they own it, if it was created by the server
+        //if (aSpawnedByServer)
+        //{
+        //    foreach (ClientData client in clientData)
+        //    {
+        //        if (client.networkIdentifier == aClientIdentifier)
+        //        {
+        //            sendMsg = server.CreateMessage();
+        //            sendMsg.Write((int)MessageType.OwnershipGained);
+        //            sendMsg.Write(aNetworkId);
+        //            server.SendMessage(sendMsg, client.connection, NetDeliveryMethod.ReliableOrdered);
+        //            break;
+        //        }
+        //    }
+        //}       
 
         // Set up our own logic for tracking which clients own which objects
         foreach (ClientData data in clientData)

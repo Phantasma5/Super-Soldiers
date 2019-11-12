@@ -13,12 +13,23 @@ public class BulletMovement : MonoBehaviour
     #endregion
     void Start()
     {
+        if (!GetComponent<NetworkSync>().owned)
+        {
+            Destroy(GetComponent<Rigidbody2D>());
+            return;
+        }
+        GetComponent<NetworkSync>().AddToArea(1);
+        //gameObject.AddComponent<Rigidbody2D>();
         myRigidbody = GetComponent<Rigidbody2D>();
         myRigidbody.AddForce(transform.forward * speed);
 ;    }
 
     void Update()
     {
+        if (!GetComponent<NetworkSync>().owned)
+        {
+            return;
+        }
         ttl -= Time.deltaTime;
         //myRigidbody.velocity = transform.forward * speed;
         if(ttl <= 0)
@@ -28,6 +39,10 @@ public class BulletMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if(!GetComponent<NetworkSync>().owned)
+        {
+            return;
+        }
         Vector3 pos;
         pos = transform.position;
         pos.z = 0;
