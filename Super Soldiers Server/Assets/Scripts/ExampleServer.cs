@@ -132,7 +132,7 @@ public class ExampleServer : MonoBehaviour
     {
         serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
         gameState = GameState.maingame;
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(3);
         int teamVotes = 0;
         foreach(var p in players)
         {

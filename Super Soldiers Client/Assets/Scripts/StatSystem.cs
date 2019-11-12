@@ -66,6 +66,7 @@ public class StatSystem : MonoBehaviour
     }//end SetValue()
     public void AddValue(StatType aStatType, float aValue)
     {
+        Debug.Log("AddValue");
         foreach (Stat s in myStats)
         {
             if (s.statType == aStatType)
@@ -84,6 +85,7 @@ public class StatSystem : MonoBehaviour
     }//end AddValue()
     public void AddCallback(StatType aStat, StatUpdateFunction aFunc)
     {
+        Debug.Log("AddCallback");
         if (statCallbacks.ContainsKey(aStat))
         {
             statCallbacks[aStat] += aFunc;

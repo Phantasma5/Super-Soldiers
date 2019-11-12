@@ -9,6 +9,7 @@ TagManager:
   - Client
   - UserInterface
   - Wall
+  - LocalPlayer
   layers:
   - Default
   - TransparentFX

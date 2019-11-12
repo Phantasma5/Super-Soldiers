@@ -40,6 +40,7 @@ public class References : MonoBehaviour
     {
         localPlayer = aPlayer;
         localStatSystem = References.localPlayer.GetComponent<StatSystem>();
+        localPlayer.tag = "LocalPlayer";
     }
 
     private void Update()

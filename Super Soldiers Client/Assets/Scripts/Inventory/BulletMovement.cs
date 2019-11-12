@@ -8,18 +8,19 @@ public class BulletMovement : MonoBehaviour
     [HideInInspector] private Rigidbody2D myRigidbody;
     #endregion
     #region Variables
-    [SerializeField] private float speed;
+    public float speed;
     [SerializeField] float ttl = 2.0f;
     #endregion
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
+        myRigidbody.AddForce(transform.forward * speed);
 ;    }
 
     void Update()
     {
         ttl -= Time.deltaTime;
-        myRigidbody.velocity = transform.forward * speed;
+        //myRigidbody.velocity = transform.forward * speed;
         if(ttl <= 0)
         {
             Destroy(gameObject);
@@ -32,12 +33,19 @@ public class BulletMovement : MonoBehaviour
         pos.z = 0;
         transform.position = pos;
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+
+    private void OnTriggerEnter2D(Collider2D collision)    
     {
-        Debug.Log(collision.transform.tag);
+        //Debug.Log(collision.transform.tag);
         if("Wall" == collision.transform.tag)
         {
             Destroy(this.gameObject);
+        }
+        else if(collision.transform.tag == "Player" && GetComponent<NetworkSync>().owned)
+        {
+            Debug.Log("Bullet -> player");
+            collision.gameObject.GetComponent<StatSystem>().AddValue(StatSystem.StatType.Health,
+                -References.localStatSystem.GetValue(StatSystem.StatType.Damage));
         }
     }
 }

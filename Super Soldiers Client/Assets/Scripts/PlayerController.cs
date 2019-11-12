@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         if (myNetSync.owned)
         {
+            
             if (knockback < Time.time)
             {
                 Movement();
@@ -74,7 +75,9 @@ public class PlayerController : MonoBehaviour
         {
             RaycastHit2D hit;
             hit = Physics2D.Raycast(transform.position - (new Vector3(0, myColldier.size.y + 0.1f, 0) / 2), -Vector3.up, 0.1f);
-            if (null != hit.collider)//upward jump
+            if (null != hit.collider &&
+                myStatSystem.GetValue(StatSystem.StatType.Fuel) !=
+                myStatSystem.GetMaxValue(StatSystem.StatType.Fuel))//upward jump
             {
                 myStatSystem.AddValue(StatSystem.StatType.Fuel, 20 * Time.deltaTime);
                 if (myStatSystem.GetValue(StatSystem.StatType.Fuel) > myStatSystem.GetMaxValue(StatSystem.StatType.Fuel))
