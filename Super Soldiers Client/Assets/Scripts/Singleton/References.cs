@@ -8,6 +8,7 @@ public class References : MonoBehaviour
     public static References instance;
     public static GameObject localPlayer;
     public static ExampleClient client;
+    public static ClientNetwork clientNet;
     public static StatSystem localStatSystem;
     public static UserInterface userInterface;
 
@@ -20,13 +21,14 @@ public class References : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(this.gameObject);
+        client = GetComponent<ExampleClient>();
+        clientNet = GetComponent<ClientNetwork>();
         FindReferences();
     }
-    private void FindReferences()
+    public static void FindReferences()
     {
         try
         {
-            client = GetComponent<ExampleClient>();
             userInterface = GameObject.FindWithTag("UserInterface").GetComponent<UserInterface>();
         }
         catch(Exception e)

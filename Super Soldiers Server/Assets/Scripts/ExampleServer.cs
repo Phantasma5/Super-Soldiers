@@ -124,12 +124,15 @@ public class ExampleServer : MonoBehaviour
         }
         if (allPlayersReady && players.Count > 1)
         {
-            RunGame();
+            StartCoroutine(RunGame());
         }
     }
 
-    private void RunGame()
+    IEnumerator RunGame()
     {
+        serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
+        gameState = GameState.maingame;
+        yield return new WaitForSeconds(1);
         int teamVotes = 0;
         foreach(var p in players)
         {
@@ -156,8 +159,6 @@ public class ExampleServer : MonoBehaviour
             }
             serverNet.CallRPC("SetTeam", UCNetwork.MessageReceiver.AllClients, -1, -1);
         }        
-        serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
-        gameState = GameState.maingame;
     }
 
     private void EndGame()
@@ -270,6 +271,7 @@ public class ExampleServer : MonoBehaviour
                 weapon = p.weapon;
             }
         }
+        Debug.Log("EquipPlayer");
         serverNet.CallRPC("SelectWeapon", UCNetwork.MessageReceiver.AllClients, netObId, weapon);
     }    
 }

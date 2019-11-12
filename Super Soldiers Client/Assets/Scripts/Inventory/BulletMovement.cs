@@ -14,7 +14,8 @@ public class BulletMovement : MonoBehaviour
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody>();
-    }
+        transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, 0, transform.rotation.z))
+;    }
 
     void Update()
     {

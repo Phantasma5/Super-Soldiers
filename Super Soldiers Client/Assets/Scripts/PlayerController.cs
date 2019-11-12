@@ -130,6 +130,10 @@ public class PlayerController : MonoBehaviour
         {
             myInventory.Fire();
         }
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            References.localPlayer.GetComponent<Inventory>().Reload();
+        }
         
     }
     private void Jump()

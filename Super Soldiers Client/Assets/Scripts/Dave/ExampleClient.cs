@@ -24,9 +24,7 @@ public class ExampleClient : MonoBehaviour
 
     public GameObject lobbyScreen;
 
-    public GameObject myPlayer;
-
-    public int weapon = 0;
+    public int weapon = 3;
 
     // Singleton support
     public static ExampleClient GetInstance()
@@ -126,9 +124,9 @@ public class ExampleClient : MonoBehaviour
     {
         Debug.Log("OnNetStatusDisconnecting called");
 
-        if (myPlayer)
+        if (References.localPlayer)
         {
-            clientNet.Destroy(myPlayer.GetComponent<NetworkSync>().GetId());
+            clientNet.Destroy(References.localPlayer.GetComponent<NetworkSync>().GetId());
         }
     }
     void OnNetStatusDisconnected()
@@ -138,9 +136,9 @@ public class ExampleClient : MonoBehaviour
         
         loginInProcess = false;
 
-        if (myPlayer)
+        if (References.localPlayer)
         {
-            clientNet.Destroy(myPlayer.GetComponent<NetworkSync>().GetId());
+            clientNet.Destroy(References.localPlayer.GetComponent<NetworkSync>().GetId());
         }
     }
     public void OnChangeArea()
@@ -148,8 +146,6 @@ public class ExampleClient : MonoBehaviour
         Debug.Log("OnChangeArea called");
 
         // Tell the server we are ready
-        myPlayer = clientNet.Instantiate("Player", new Vector3(Random.Range(-2,2), 3, 0), Quaternion.identity);
-        myPlayer.GetComponent<NetworkSync>().AddToArea(1);
     }
 
     // RPC Called by the server once it has finished sending all area initization data for a new area
@@ -160,9 +156,9 @@ public class ExampleClient : MonoBehaviour
     
     void OnDestroy()
     {
-        if (myPlayer)
+        if (References.localPlayer)
         {
-            clientNet.Destroy(myPlayer.GetComponent<NetworkSync>().GetId());
+            clientNet.Destroy(References.localPlayer.GetComponent<NetworkSync>().GetId());
         }
         if (clientNet.IsConnected())
         {
@@ -195,13 +191,14 @@ public class ExampleClient : MonoBehaviour
     public void TransitionToGame()
     {
         SceneManager.LoadScene(maingame);
-        foreach(var p in GameObject.FindGameObjectsWithTag("Player"))
-        {
-            p.transform.position = new Vector3(
-                p.transform.position.x,
-                0,
-                p.transform.position.z);
-        }
+
+        //foreach (var p in GameObject.FindGameObjectsWithTag("Player"))
+        //{
+        //    p.transform.position = new Vector3(
+        //        p.transform.position.x,
+        //        0,
+        //        p.transform.position.z);
+        //}
     }
 
     [RPCMethod]
@@ -222,11 +219,11 @@ public class ExampleClient : MonoBehaviour
     [RPCMethod]
     public void SetTeam(int team)
     {
-        myPlayer.GetComponent<PlayerController>().team = team;
+        References.localPlayer.GetComponent<PlayerController>().team = team;
     }    
     public void GimmeAGun()
     {
-        clientNet.CallRPC("EquipPlayer", UCNetwork.MessageReceiver.ServerOnly, -1, myPlayer.GetComponent<NetworkSync>().GetId());
+        clientNet.CallRPC("EquipPlayer", UCNetwork.MessageReceiver.ServerOnly, -1, References.localPlayer.GetComponent<NetworkSync>().GetId());
     }
 }
 

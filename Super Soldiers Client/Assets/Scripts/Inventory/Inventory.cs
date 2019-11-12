@@ -9,8 +9,7 @@ public class Inventory : MonoBehaviour
         None,
         Sniper,
         Gernade,
-        AR,
-        Laser
+        AR
     }
 
     #region References
@@ -21,20 +20,10 @@ public class Inventory : MonoBehaviour
     [HideInInspector] private int ammoMax;
     [HideInInspector] private float shootCD;
     #endregion
-    private void Start()
-    {
-        if (WeaponType.None == weapon)
-        {
-            RandomWeapon();
-        }
-    }
-    private void RandomWeapon()
-    {
-        Debug.Log("RandomingWeapon");
-        SetWeapon(Random.Range(1, 4));
-    }
+
     public void SetWeapon(int aWeapon)
     {
+        Debug.Log("Weapon" + aWeapon);
         weapon = (WeaponType)aWeapon;
         switch (aWeapon)
         {
@@ -46,9 +35,6 @@ public class Inventory : MonoBehaviour
                 break;
             case 3:
                 ammoMax = 15;
-                break;
-            case 4:
-                ammoMax = 999999;
                 break;
         }
         ammo = ammoMax;
@@ -71,8 +57,6 @@ public class Inventory : MonoBehaviour
         tempTrans.position = transform.position;
         tempTrans.LookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
         var temp = ExampleClient.GetInstance().clientNet.Instantiate("BulletAR", tempTrans.position, tempTrans.rotation);
-        //Destroy(temp, 2);
-        //TODO: CD based on weapon
     }
     private void UpdateAmmo()
     {

@@ -17,6 +17,7 @@ public class PlayerRPC : MonoBehaviour
     [RPCMethod]
     public void SelectWeapon(int aWeapon)
     {
-        myInventory.weapon = (Inventory.WeaponType)aWeapon;
+        Debug.Log("SetWeapon");
+        myInventory.SetWeapon(aWeapon);
     }
 }
