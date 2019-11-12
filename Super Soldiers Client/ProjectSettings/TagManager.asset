@@ -8,6 +8,7 @@ TagManager:
   - OtherShip
   - Client
   - UserInterface
+  - Wall
   layers:
   - Default
   - TransparentFX

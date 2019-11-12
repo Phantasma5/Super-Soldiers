@@ -122,7 +122,7 @@ public class ExampleServer : MonoBehaviour
                 allPlayersReady = false;
             }
         }
-        if (allPlayersReady && players.Count > 1)
+        if (allPlayersReady && players.Count > 0)
         {
             StartCoroutine(RunGame());
         }

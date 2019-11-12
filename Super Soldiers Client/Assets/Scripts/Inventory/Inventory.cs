@@ -55,7 +55,11 @@ public class Inventory : MonoBehaviour
         GameObject tempObj = new GameObject();
         Transform tempTrans = tempObj.transform;
         tempTrans.position = transform.position;
-        tempTrans.LookAt(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        Vector3 target;
+        target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        target = new Vector3(target.x, target.y, 0);
+        tempTrans.LookAt(target);
+        //tempTrans.position = new Vector3(tempTrans.position.x, tempTrans.position.y, 0);
         var temp = ExampleClient.GetInstance().clientNet.Instantiate("BulletAR", tempTrans.position, tempTrans.rotation);
     }
     private void UpdateAmmo()

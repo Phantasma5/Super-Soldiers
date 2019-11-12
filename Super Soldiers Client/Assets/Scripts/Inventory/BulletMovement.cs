@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletMovement : MonoBehaviour
 {
     #region References
-    [HideInInspector] private Rigidbody myRigidbody;
+    [HideInInspector] private Rigidbody2D myRigidbody;
     #endregion
     #region Variables
     [SerializeField] private float speed;
@@ -13,8 +13,7 @@ public class BulletMovement : MonoBehaviour
     #endregion
     void Start()
     {
-        myRigidbody = GetComponent<Rigidbody>();
-        transform.rotation = Quaternion.Euler(new Vector3(transform.rotation.x, 0, transform.rotation.z))
+        myRigidbody = GetComponent<Rigidbody2D>();
 ;    }
 
     void Update()
@@ -24,6 +23,21 @@ public class BulletMovement : MonoBehaviour
         if(ttl <= 0)
         {
             Destroy(gameObject);
+        }
+    }
+    private void FixedUpdate()
+    {
+        Vector3 pos;
+        pos = transform.position;
+        pos.z = 0;
+        transform.position = pos;
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log(collision.transform.tag);
+        if("Wall" == collision.transform.tag)
+        {
+            Destroy(this.gameObject);
         }
     }
 }
