@@ -57,9 +57,16 @@ public class Inventory : MonoBehaviour
         Vector3 target;
         target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         target = new Vector3(target.x, target.y, 0);
-        var temp = ExampleClient.GetInstance().clientNet.Instantiate("BulletAR", tempTrans.position, Quaternion.identity);
+        var temp = ExampleClient.GetInstance().clientNet.Instantiate(BulletType(), tempTrans.position, Quaternion.identity);
         Vector2 delta = target - transform.position;
-        temp.GetComponent<Rigidbody2D>().AddForce(delta.normalized * temp.GetComponent<BulletMovement>().speed);
+        try
+        {
+            temp.GetComponent<Rigidbody2D>().AddForce(delta.normalized * temp.GetComponent<BulletMovement>().speed);
+        }
+        catch
+        {
+            temp.GetComponent<Rigidbody2D>().AddForce(delta.normalized * temp.GetComponent<Grenade>().speed);
+        }
         Destroy(tempObj);
     }
     private void UpdateAmmo()
@@ -83,5 +90,19 @@ public class Inventory : MonoBehaviour
         yield return new WaitForSeconds(2);
         ammo = ammoMax;
         UpdateAmmo();
+    }
+    private string BulletType()
+    {
+        switch (weapon)
+        {
+            case WeaponType.Sniper:
+                return "BulletAR";
+            case WeaponType.Gernade:
+                return "Grenade";
+            case WeaponType.AR:
+                return "BulletAR";
+            default:
+                return "BulletAR";
+        }
     }
 }
