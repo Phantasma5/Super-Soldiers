@@ -10,6 +10,7 @@ public class References : MonoBehaviour
     public static ExampleClient client;
     public static ClientNetwork clientNet;
     public static StatSystem localStatSystem;
+    public static Inventory localInventory;
     public static UserInterface userInterface;
 
     private void Awake()
@@ -40,6 +41,7 @@ public class References : MonoBehaviour
     {
         localPlayer = aPlayer;
         localStatSystem = References.localPlayer.GetComponent<StatSystem>();
+        localInventory = References.localPlayer.GetComponent<Inventory>();
         localPlayer.tag = "LocalPlayer";
     }
 

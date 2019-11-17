@@ -218,8 +218,8 @@ MonoBehaviour:
     value: 300
     maxValue: 300
   - statType: 2
-    value: 100
-    maxValue: 100
+    value: 300
+    maxValue: 300
   - statType: 3
     value: 0
     maxValue: 100
