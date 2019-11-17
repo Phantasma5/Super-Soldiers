@@ -208,17 +208,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myStats:
-  - statType: 0
+  - statType: 1
     value: 100
     maxValue: 100
-  - statType: 1
-    value: 300
-    maxValue: 300
   - statType: 4
+    value: 100
+    maxValue: 100
+  - statType: 5
     value: 300
     maxValue: 300
-  - statType: 3
+  - statType: 2
     value: 100
+    maxValue: 100
+  - statType: 3
+    value: 0
     maxValue: 100
 --- !u!114 &8118421327266960973
 MonoBehaviour:
@@ -234,6 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon: 0
   ammo: 0
+  reloadCD: 0
 --- !u!114 &-3621491252566587437
 MonoBehaviour:
   m_ObjectHideFlags: 0

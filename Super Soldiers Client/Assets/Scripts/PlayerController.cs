@@ -35,6 +35,10 @@ public class PlayerController : MonoBehaviour
         {
             References.LocalPlayerReferences(this.gameObject);
         }
+        else
+        {
+            Destroy(myRigidbody);
+        }
     }
 
     void Update()

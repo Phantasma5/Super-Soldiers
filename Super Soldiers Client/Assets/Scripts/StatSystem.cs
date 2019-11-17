@@ -6,11 +6,13 @@ public class StatSystem : MonoBehaviour
 {
     public enum StatType
     {
+        First,
         Health,
         Movespeed,
         Damage,
         Fuel,
-        JumpStrength
+        JumpStrength,
+        Last
     }
     public delegate void StatUpdateFunction(StatType aStat, float aOldValue, float aNewValue);
     [System.Serializable]
@@ -45,7 +47,6 @@ public class StatSystem : MonoBehaviour
         }
         return (float.MinValue);
     }
-
     public void SetValue(StatType aStatType, float aValue)
     {
         foreach (Stat s in myStats)
@@ -70,7 +71,6 @@ public class StatSystem : MonoBehaviour
     }//end SetValue()
     public void AddValue(StatType aStatType, float aValue)
     {
-        Debug.Log("AddValue: " + aValue);
         foreach (Stat s in myStats)
         {
             if (s.statType == aStatType)

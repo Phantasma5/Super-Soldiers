@@ -61,6 +61,7 @@ public class BulletMovement : MonoBehaviour
             Debug.Log("Bullet -> player");
             collision.gameObject.GetComponent<StatSystem>().AddValue(StatSystem.StatType.Health,
                 -References.localStatSystem.GetValue(StatSystem.StatType.Damage));
+            Destroy(this.gameObject);
         }
     }
 }
