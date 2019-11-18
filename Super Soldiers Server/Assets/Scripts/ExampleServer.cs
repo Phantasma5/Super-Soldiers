@@ -200,13 +200,13 @@ public class ExampleServer : MonoBehaviour
 
     private void Update()
     {
-        gameTime += Time.deltaTime;
         if (gameState == GameState.pregame)
         {
-
+            gameTime = 0;
         }
         else if (gameState == GameState.maingame)
         {
+            gameTime += Time.deltaTime;
             if (!MultipleLivePlayers() && gameTime > 10.0f)
             {
                 EndGame();
@@ -214,7 +214,7 @@ public class ExampleServer : MonoBehaviour
         }
         else if (gameState == GameState.postgame)
         {
-
+            gameTime = 0;
         }
     }
 

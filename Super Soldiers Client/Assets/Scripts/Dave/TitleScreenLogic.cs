@@ -2,12 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class TitleScreenLogic : MonoBehaviour {
+public class TitleScreenLogic : MonoBehaviour
+{
 
     public Text server;
     public Text port;
     public ExampleClient client;
-    public GameObject lobbyCanvas;
+    public GameObject loginCanvas;
 
     private void Awake()
     {
@@ -16,7 +17,11 @@ public class TitleScreenLogic : MonoBehaviour {
     }
 
     private void Start()
-    {        
+    {
+        if (!ExampleClient.GetInstance().firstLaunch)
+        {
+            loginCanvas.SetActive(false);
+        }
     }
 
     public void Connect()
@@ -26,13 +31,15 @@ public class TitleScreenLogic : MonoBehaviour {
 
     private void Update()
     {
-        //if (client.clientNet.IsConnected())
-        //{
-        //    client.loginScreen.SetActive(false);
-        //}
-        //else
-        //{
-        //    client.loginScreen.SetActive(true);
-        //}
+        if (ExampleClient.GetInstance().uiState == ExampleClient.UIState.login)
+        {
+            if (!loginCanvas.activeInHierarchy)
+                loginCanvas.SetActive(true);
+        }
+        else
+        {
+            if (loginCanvas.activeInHierarchy)
+                loginCanvas.SetActive(false);
+        }
     }
 }

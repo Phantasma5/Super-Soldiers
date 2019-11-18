@@ -8,8 +8,16 @@ using SSRPCs;
 [RPCClass]
 public class ExampleClient : MonoBehaviour
 {
+    public enum UIState
+    {
+        login,
+        readyUp,
+        play
+    }
+    public UIState uiState;
     public ClientNetwork clientNet;
     float timeToSend = 5.0f;
+    public bool firstLaunch = true;
 
     public string pregame;
     public string maingame;
@@ -20,9 +28,9 @@ public class ExampleClient : MonoBehaviour
     // Are we in the process of logging into a server
     private bool loginInProcess = false;
 
-    public GameObject loginScreen;
+    //public GameObject loginScreen;
 
-    public GameObject lobbyScreen;
+    //public GameObject lobbyScreen;
 
     public int weapon = 3;
 
@@ -113,10 +121,10 @@ public class ExampleClient : MonoBehaviour
     }
     void OnNetStatusConnected()
     {
-        loginScreen.SetActive(false);
-        lobbyScreen.SetActive(true);
+        //loginScreen.SetActive(false);
+        //lobbyScreen.SetActive(true);
         Debug.Log("OnNetStatusConnected called");
-
+        uiState = UIState.readyUp;
         clientNet.AddToArea(1);
     }
 
@@ -191,7 +199,7 @@ public class ExampleClient : MonoBehaviour
     public void TransitionToGame()
     {
         SceneManager.LoadScene(maingame);
-
+        uiState = UIState.play;
         //foreach (var p in GameObject.FindGameObjectsWithTag("Player"))
         //{
         //    p.transform.position = new Vector3(
@@ -204,9 +212,11 @@ public class ExampleClient : MonoBehaviour
     [RPCMethod]
     public void TransitionToLobby()
     {
+        firstLaunch = false;
         SceneManager.LoadScene(pregame);
-        loginScreen.SetActive(false);
-        lobbyScreen.SetActive(true);
+        uiState = UIState.readyUp;
+        //loginScreen.SetActive(false);
+        //lobbyScreen.SetActive(true);
     }
 
     public void ReadyUpTeamGame()

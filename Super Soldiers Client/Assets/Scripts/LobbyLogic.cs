@@ -17,10 +17,16 @@ public class LobbyLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(!ExampleClient.GetInstance().clientNet.IsConnected())
-        //{
-        //    lobbyCanvas.SetActive(false);
-        //}
+        if(ExampleClient.GetInstance().uiState == ExampleClient.UIState.readyUp)
+        {
+            if(!lobbyCanvas.activeInHierarchy)
+                lobbyCanvas.SetActive(true);
+        }
+        else
+        {
+            if (lobbyCanvas.activeInHierarchy)
+                lobbyCanvas.SetActive(false);
+        }
     }
 
     public void VoteTeamGame()
