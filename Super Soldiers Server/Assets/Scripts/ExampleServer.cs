@@ -36,7 +36,7 @@ public class ExampleServer : MonoBehaviour
         public bool isReady;
         public bool isConnected;
         //public int team;
-        public float health;
+        public bool health;
         public int weapon;
         public bool teamVote;
     }
@@ -134,6 +134,10 @@ public class ExampleServer : MonoBehaviour
     {
         serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
         gameState = GameState.maingame;
+        foreach(var p in players)
+        {
+            p.health = true;
+        }
         yield return new WaitForSeconds(3);
         //int teamVotes = 0;
         //foreach(var p in players)
@@ -169,7 +173,7 @@ public class ExampleServer : MonoBehaviour
         gameState = GameState.pregame;
         foreach (var p in players)
         {
-            if (p.health > 0)
+            if (p.health)
             {
                 string s = p.clientId + " wins with " + p.health + " health";
                 Chat(true, -1, s);
@@ -196,22 +200,22 @@ public class ExampleServer : MonoBehaviour
 
     private void Update()
     {
-        //gameTime += Time.deltaTime;
-        //if (gameState == GameState.pregame)
-        //{
+        gameTime += Time.deltaTime;
+        if (gameState == GameState.pregame)
+        {
 
-        //}
-        //else if (gameState == GameState.maingame)
-        //{
-        //    if (!MultipleLivePlayers() && gameTime > 10.0f)
-        //    {
-        //        EndGame();
-        //    }
-        //}
-        //else if (gameState == GameState.postgame)
-        //{
+        }
+        else if (gameState == GameState.maingame)
+        {
+            if (!MultipleLivePlayers() && gameTime > 10.0f)
+            {
+                EndGame();
+            }
+        }
+        else if (gameState == GameState.postgame)
+        {
 
-        //}
+        }
     }
 
     [RPCMethod]
@@ -237,7 +241,7 @@ public class ExampleServer : MonoBehaviour
         int alive = 0;
         foreach (var p in players)
         {
-            if (p.health > 0)
+            if (p.health)
             {
                 alive++;
                 if (alive > 1)
@@ -262,5 +266,17 @@ public class ExampleServer : MonoBehaviour
         }
         Debug.Log("EquipPlayer");
         serverNet.CallRPC("SelectWeapon", UCNetwork.MessageReceiver.AllClients, netObId, weapon);
+    }
+
+    [RPCMethod]
+    public void UpdateHealth(bool health)
+    {
+        foreach(var p in players)
+        {
+            if(p.clientId == serverNet.SendingClientId)
+            {
+                p.health = health;
+            }
+        }
     }
 }

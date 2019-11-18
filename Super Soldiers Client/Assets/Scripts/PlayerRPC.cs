@@ -27,6 +27,10 @@ public class PlayerRPC : MonoBehaviour
         Debug.Log("PlayerRPC: UpdateHealth" + newVal);
         References.clientNet.CallRPC("UpdatePlayerHealth",
             UCNetwork.MessageReceiver.OtherClients, GetComponent<NetworkSync>().GetId(), newVal);
+        if(newVal <= 0)
+        {
+            References.clientNet.CallRPC("UpdateHealth", UCNetwork.MessageReceiver.ServerOnly, -1, false);
+        }
     }
     [RPCMethod]
     public void UpdatePlayerHealth(float newVal)
