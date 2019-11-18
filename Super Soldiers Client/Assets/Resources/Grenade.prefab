@@ -147,7 +147,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 4717450415418432851}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: d190c73c294309a49ae0cf6625f6b032, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 500
+  detonationForce: 1000
 --- !u!114 &4291495570024778065
 MonoBehaviour:
   m_ObjectHideFlags: 0

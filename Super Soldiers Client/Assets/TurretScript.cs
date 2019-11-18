@@ -23,6 +23,6 @@ public class TurretScript : MonoBehaviour
         float x = Input.mousePosition.x - Screen.width / 2;
         float y = Input.mousePosition.y - Screen.height / 2;
         transform.localPosition = new Vector3(
-            x, y, 0).normalized;
+            x, y, 0).normalized * 0.6f;
     }
 }
