@@ -6,6 +6,7 @@ public class Grenade : MonoBehaviour
 {
     Rigidbody2D rb;
     public float speed = 500.0f;
+    public float grenadeForce = 1000.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -29,4 +30,30 @@ public class Grenade : MonoBehaviour
     {
         
     }
+
+    private void OnDestroy()
+    {
+        foreach(var target in Physics2D.OverlapCircleAll(transform.position, 2.0f))
+        {
+            NetworkSync ns;
+            if(target.TryGetComponent<NetworkSync>(out ns))
+            {
+                if(ns.owned)
+                {
+                    Vector2 temp = target.transform.position - transform.position;                    
+                    target.attachedRigidbody.AddForceAtPosition(temp * grenadeForce, transform.position);
+                    Debug.Log("Grenade -> player");
+                    target.gameObject.GetComponent<StatSystem>().AddValue(StatSystem.StatType.Health,
+                        -References.localStatSystem.GetValue(StatSystem.StatType.Damage));
+                }
+            }            
+        }
+    }
+
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    Debug.Log("Grenade -> player");
+    //    collision.gameObject.GetComponent<StatSystem>().AddValue(StatSystem.StatType.Health,
+    //        -References.localStatSystem.GetValue(StatSystem.StatType.Damage));
+    //}
 }

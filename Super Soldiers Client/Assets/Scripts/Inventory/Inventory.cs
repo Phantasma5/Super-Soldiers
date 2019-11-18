@@ -13,6 +13,7 @@ public class Inventory : MonoBehaviour
     }
 
     #region References
+    public GameObject turret;
     #endregion
     #region Variables
     [HideInInspector] public WeaponType weapon;
@@ -51,13 +52,13 @@ public class Inventory : MonoBehaviour
         }
         ammo -= 1;
         UpdateAmmo();
-        GameObject tempObj = new GameObject();
-        Transform tempTrans = tempObj.transform;
-        tempTrans.position = transform.position;
+        //GameObject tempObj = new GameObject();
+        //Transform tempTrans = tempObj.transform;
+        //tempTrans.position = transform.position;
         Vector3 target;
         target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         target = new Vector3(target.x, target.y, 0);
-        var temp = ExampleClient.GetInstance().clientNet.Instantiate(BulletType(), tempTrans.position, Quaternion.identity);
+        var temp = ExampleClient.GetInstance().clientNet.Instantiate(BulletType(), turret.transform.position, Quaternion.identity);
         Vector2 delta = target - transform.position;
         try
         {
@@ -67,7 +68,7 @@ public class Inventory : MonoBehaviour
         {
             temp.GetComponent<Rigidbody2D>().AddForce(delta.normalized * temp.GetComponent<Grenade>().speed);
         }
-        Destroy(tempObj);
+        //Destroy(tempObj);
     }
     private void UpdateAmmo()
     {
