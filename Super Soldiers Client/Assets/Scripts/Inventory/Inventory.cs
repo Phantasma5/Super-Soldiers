@@ -68,6 +68,7 @@ public class Inventory : MonoBehaviour
         {
             temp.GetComponent<Rigidbody2D>().AddForce(delta.normalized * temp.GetComponent<Grenade>().speed);
         }
+        //ExampleClient.GetInstance().clientNet.ad
         //Destroy(tempObj);
     }
     private void UpdateAmmo()

@@ -14,6 +14,7 @@ public class Grenade : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         if (GetComponent<NetworkSync>().owned)
         {
+            GetComponent<NetworkSync>().AddToArea(1);
             rb.isKinematic = false;
             this.enabled = true;
             //rb.AddRelativeForce(Vector2.right * initialForce);

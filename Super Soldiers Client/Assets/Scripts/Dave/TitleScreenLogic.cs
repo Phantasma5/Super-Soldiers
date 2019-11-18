@@ -11,21 +11,28 @@ public class TitleScreenLogic : MonoBehaviour {
 
     private void Awake()
     {
-        client.loginScreen.SetActive(true);
-        lobbyCanvas.SetActive(false);
+        //client.loginScreen.SetActive(true);
+        //lobbyCanvas.SetActive(false);
     }
 
     private void Start()
-    {
-        if(client.clientNet.IsConnected())
-        {
-            client.loginScreen.SetActive(false);
-            lobbyCanvas.SetActive(true);
-        }
+    {        
     }
 
     public void Connect()
     {
         client.ConnectToServer(server.text, int.Parse(port.text));
+    }
+
+    private void Update()
+    {
+        //if (client.clientNet.IsConnected())
+        //{
+        //    client.loginScreen.SetActive(false);
+        //}
+        //else
+        //{
+        //    client.loginScreen.SetActive(true);
+        //}
     }
 }

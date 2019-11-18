@@ -205,6 +205,8 @@ public class ExampleClient : MonoBehaviour
     public void TransitionToLobby()
     {
         SceneManager.LoadScene(pregame);
+        loginScreen.SetActive(false);
+        lobbyScreen.SetActive(true);
     }
 
     public void ReadyUpTeamGame()

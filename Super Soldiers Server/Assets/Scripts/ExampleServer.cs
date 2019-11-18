@@ -17,14 +17,16 @@ public class ExampleServer : MonoBehaviour
     }
     public static GameState gameState = GameState.pregame;
 
-    public bool teamGame = true;
-    public int teams = 2;
+    //public bool teamGame = true;
+    //public int teams = 2;
 
     public static ExampleServer instance;
 
     public ServerNetwork serverNet;
 
     public int portNumber = 603;
+
+    float gameTime = 0;
 
     // Stores a player
     class Player
@@ -33,7 +35,7 @@ public class ExampleServer : MonoBehaviour
         public string playerName;
         public bool isReady;
         public bool isConnected;
-        public int team;
+        //public int team;
         public float health;
         public int weapon;
         public bool teamVote;
@@ -133,38 +135,47 @@ public class ExampleServer : MonoBehaviour
         serverNet.CallRPC("TransitionToGame", UCNetwork.MessageReceiver.AllClients, -1);
         gameState = GameState.maingame;
         yield return new WaitForSeconds(3);
-        int teamVotes = 0;
-        foreach(var p in players)
-        {
-            if(p.teamVote)
-            {
-                teamVotes++;
-            }
-        }
-        if(teamVotes >= players.Count / 2)
-        {
-            teamGame = true;
-            for(int i = 0; i < players.Count; i++)
-            {
-                players[i].team = i % 2;
-                serverNet.CallRPC("SetTeam", players[i].clientId, -1, i % 2);
-            }
-        }
-        else
-        {
-            teamGame = false;
-            foreach(var p in players)
-            {
-                p.team = -1;
-            }
-            serverNet.CallRPC("SetTeam", UCNetwork.MessageReceiver.AllClients, -1, -1);
-        }        
+        //int teamVotes = 0;
+        //foreach(var p in players)
+        //{
+        //    if(p.teamVote)
+        //    {
+        //        teamVotes++;
+        //    }
+        //}
+        //if(teamVotes >= players.Count / 2)
+        //{
+        //    teamGame = true;
+        //    for(int i = 0; i < players.Count; i++)
+        //    {
+        //        players[i].team = i % 2;
+        //        serverNet.CallRPC("SetTeam", players[i].clientId, -1, i % 2);
+        //    }
+        //}
+        //else
+        //{
+        //teamGame = false;
+        //foreach(var p in players)
+        //{
+        //    p.team = -1;
+        //}
+        //serverNet.CallRPC("SetTeam", UCNetwork.MessageReceiver.AllClients, -1, -1);
+        //}        
     }
 
     private void EndGame()
     {
         serverNet.CallRPC("TransitionToLobby", UCNetwork.MessageReceiver.AllClients, -1);
         gameState = GameState.pregame;
+        foreach (var p in players)
+        {
+            if (p.health > 0)
+            {
+                string s = p.clientId + " wins with " + p.health + " health";
+                Chat(true, -1, s);
+            }
+            p.isReady = false;
+        }
     }
 
     void OnClientDisconnected(long aClientId)
@@ -177,81 +188,59 @@ public class ExampleServer : MonoBehaviour
                 players.Remove(p);
             }
         }
+        if (players.Count < 2)
+        {
+            EndGame();
+        }
     }
 
     private void Update()
     {
-        //if (gameState == GameState.maingame)
+        //gameTime += Time.deltaTime;
+        //if (gameState == GameState.pregame)
         //{
-        //    if (teamGame)
+
+        //}
+        //else if (gameState == GameState.maingame)
+        //{
+        //    if (!MultipleLivePlayers() && gameTime > 10.0f)
         //    {
-        //        int remainingTeams = 0;
-        //        for (int i = 0; i < teams; i++)
-        //        {
-        //            if (LivePlayersOnTeam(i))
-        //            {
-        //                remainingTeams++;
-        //            }
-        //        }
-        //        if (remainingTeams <= 1)
-        //        {
-        //            EndGame();
-        //        }
+        //        EndGame();
         //    }
-        //    else
-        //    {
-        //        if (!MultipleLivePlayers())
-        //        {
-        //            EndGame();
-        //        }
-        //    }
+        //}
+        //else if (gameState == GameState.postgame)
+        //{
+
         //}
     }
 
     [RPCMethod]
     public void Chat(bool global, int team, string message)
     {
-        if (global)
-        {
-            //foreach (Player p in players)
-            //{
-            //    serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
-            //}
-            serverNet.CallRPC("ReceiveChat", UCNetwork.MessageReceiver.AllClients, -1, global, message);
-        }
-        else
-        {
-            foreach (Player p in players)
-            {
-                if (p.team == team)
-                {
-                    serverNet.CallRPC("ReceiveChat", p.clientId, -1, global, message);
-                }
-            }
-        }
+        serverNet.CallRPC("ReceiveChat", UCNetwork.MessageReceiver.AllClients, -1, global, message);
     }
 
-    public bool LivePlayersOnTeam(int team)
-    {
-        foreach(var p in players)
-        {
-            if(p.team == team && p.health > 0)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    //public bool LivePlayersOnTeam(int team)
+    //{
+    //    foreach (var p in players)
+    //    {
+    //        if (p.team == team && p.health > 0)
+    //        {
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+    //}
 
     public bool MultipleLivePlayers()
     {
         int alive = 0;
-        foreach(var p in players)
+        foreach (var p in players)
         {
-            if(p.health > 0)
+            if (p.health > 0)
             {
                 alive++;
-                if(alive > 1)
+                if (alive > 1)
                 {
                     return true;
                 }
@@ -266,12 +255,12 @@ public class ExampleServer : MonoBehaviour
         int weapon = 0;
         foreach (var p in players)
         {
-            if(p.clientId == serverNet.SendingClientId)
+            if (p.clientId == serverNet.SendingClientId)
             {
                 weapon = p.weapon;
             }
         }
         Debug.Log("EquipPlayer");
         serverNet.CallRPC("SelectWeapon", UCNetwork.MessageReceiver.AllClients, netObId, weapon);
-    }    
+    }
 }
