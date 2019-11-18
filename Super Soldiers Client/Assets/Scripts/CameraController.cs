@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private float CameraZoom = 5;
+    private float CameraZoom = 8;
     private void Update()
     {
         if (null == References.localPlayer)
