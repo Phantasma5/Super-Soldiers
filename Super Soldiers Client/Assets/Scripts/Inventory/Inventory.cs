@@ -24,20 +24,20 @@ public class Inventory : MonoBehaviour
 
     public void SetWeapon(int aWeapon)
     {
-        Debug.Log("Weapon" + aWeapon);
         weapon = (WeaponType)aWeapon;
+        Camera.main.GetComponent<CameraController>().UpdateCameraZoom();
         switch (aWeapon)
         {
             case 1:
-                ammoMax = 1;
+                ammoMax = 1;//sniper
                 References.localStatSystem.SetValue(StatSystem.StatType.Damage, 50);
                 break;
             case 2:
-                ammoMax = 1;
+                ammoMax = 1;//gernade
                 References.localStatSystem.SetValue(StatSystem.StatType.Damage, 100);
                 break;
             case 3:
-                ammoMax = 15;
+                ammoMax = 15;//AR
                 References.localStatSystem.SetValue(StatSystem.StatType.Damage, 10);
                 break;
         }

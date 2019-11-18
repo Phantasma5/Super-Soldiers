@@ -13,7 +13,6 @@ public class PlayerRPC : MonoBehaviour
     {
         myInventory = GetComponent<Inventory>();
         myPlayerController = GetComponent<PlayerController>();
-        Debug.Log("AddThisCallback");
         myStatSystem = GetComponent<StatSystem>();
         myStatSystem.AddCallback(StatSystem.StatType.Health, UpdateHealth);
         //References.client.gameObject.GetComponent<ClientNetwork>().CallRPC("GetIt", UCNetwork.MessageReceiver.ServerOnly, -1);
@@ -21,19 +20,18 @@ public class PlayerRPC : MonoBehaviour
     [RPCMethod]
     public void SelectWeapon(int aWeapon)
     {
-        Debug.Log("SetWeapon");
         myInventory.SetWeapon(aWeapon);
     }
     private void UpdateHealth(StatSystem.StatType aStat, float oldVal, float newVal)
     {
-        Debug.Log("UpdatePlayerHealth");
+        Debug.Log("PlayerRPC: UpdateHealth" + newVal);
         References.clientNet.CallRPC("UpdatePlayerHealth",
             UCNetwork.MessageReceiver.OtherClients, GetComponent<NetworkSync>().GetId(), newVal);
     }
     [RPCMethod]
     public void UpdatePlayerHealth(float newVal)
     {
-        Debug.Log("Ping");
+        Debug.Log(newVal);
         myStatSystem.SetValue(StatSystem.StatType.Health, newVal);
     }
 }
