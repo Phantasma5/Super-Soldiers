@@ -16,9 +16,17 @@ public class TimeToLive : MonoBehaviour
     void Update()
     {
         elapsedTime += Time.deltaTime;
-        if(elapsedTime > maxTime)
+        if (elapsedTime > maxTime)
         {
-            Destroy(gameObject);
+            NetworkSync ns;
+            if (TryGetComponent<NetworkSync>(out ns))
+            {
+                ns.Destroy();
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

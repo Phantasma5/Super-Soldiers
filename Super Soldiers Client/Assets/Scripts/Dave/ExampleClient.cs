@@ -215,6 +215,18 @@ public class ExampleClient : MonoBehaviour
         firstLaunch = false;
         SceneManager.LoadScene(pregame);
         uiState = UIState.readyUp;
+        foreach(var p in GameObject.FindGameObjectsWithTag("LocalPlayer"))
+        {
+            NetworkSync ns;
+            if(p.TryGetComponent<NetworkSync>(out ns))
+            {
+                ns.Destroy();
+            }
+            else
+            {
+                Destroy(p);
+            }
+        }
         //loginScreen.SetActive(false);
         //lobbyScreen.SetActive(true);
     }
