@@ -54,14 +54,29 @@ public class BulletMovement : MonoBehaviour
         //Debug.Log(collision.transform.tag);
         if("Wall" == collision.transform.tag)
         {
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            SelfDestruct();
         }
         else if(collision.transform.tag == "Player" && GetComponent<NetworkSync>().owned)
         {
             Debug.Log("Bullet -> player");
             collision.gameObject.GetComponent<StatSystem>().AddValue(StatSystem.StatType.Health,
                 -References.localStatSystem.GetValue(StatSystem.StatType.Damage));
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            SelfDestruct();
+        }
+    }
+
+    private void SelfDestruct()
+    {
+        NetworkSync ns;
+        if(TryGetComponent<NetworkSync>(out ns))
+        {
+            ns.Destroy();
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 }

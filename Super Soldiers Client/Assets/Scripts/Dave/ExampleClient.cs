@@ -238,6 +238,10 @@ public class ExampleClient : MonoBehaviour
 
     public void ReadyUpFFA()
     {
+        if(weapon == 0)
+        {
+            weapon = Random.Range(1, 3);
+        }
         clientNet.CallRPC("PlayerIsReady", UCNetwork.MessageReceiver.ServerOnly, -1, weapon, false);
     }
     [RPCMethod]
